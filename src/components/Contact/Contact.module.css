@@ -1,0 +1,32 @@
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 1050px;
+}
+
+.name,
+.number {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.contact {
+  border: 2px solid #1c1c1d99;
+  border-radius: 4px;
+  width: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.text {
+  display: grid;
+  gap: 5px;
+}
+
+.icon {
+  width: 20px;
+}
