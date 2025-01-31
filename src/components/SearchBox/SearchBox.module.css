@@ -2,8 +2,10 @@
   width: 264px;
   margin-bottom: 20px;
   padding: 8px;
+  display: flex;
 }
 
 .filterText {
-  margin-bottom: 5px;
+  display: grid;
+  gap: 5px;
 }

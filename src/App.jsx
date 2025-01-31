@@ -1,35 +1,68 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { fetchContacts } from "./redux/contactsOps";
-import ContactForm from "./components/ContactForm/ContactForm";
-import SearchBox from "./components/SearchBox/SearchBox";
-import ContactList from "./components/ContactList/ContactList";
-import { selectNameFilter } from "./redux/filtersSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, lazy } from 'react';
+import { refreshUser } from './redux/auth/operations';
+import { selectIsRefreshing } from './redux/auth/selectors';
+import { Route, Routes } from 'react-router-dom';
+const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
+const RegistrationPage = lazy(() =>
+  import('./pages/RegistrationPage/RegisterPage.jsx')
+);
+const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
+const ContactsPage = lazy(() => import('./pages/ContactsPage/ContactsPage'));
+import { Layout } from './components/Layout/Layout';
+import { RestrictedRoute } from './components/RestrictedRoute/RestrictedRoute';
+import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
+import { Toaster } from 'react-hot-toast';
+import { DNA } from 'react-loader-spinner';
 
 function App() {
   const dispatch = useDispatch();
-  const contacts = useSelector((state) => state.contacts.items);
-  const filter = useSelector(selectNameFilter);
-  const loading = useSelector((state) => state.contacts.loading);
-  const error = useSelector((state) => state.contacts.error);
+  const isRefreshing = useSelector(selectIsRefreshing);
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(refreshUser());
   }, [dispatch]);
 
-  return (
-    <div>
-      <h1>Phonebook</h1>
-      <ContactForm />
-      <SearchBox />
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      <ContactList
-        contacts={contacts.filter((contact) =>
-          contact.name.toLowerCase().includes(filter.toLowerCase())
-        )}
+  return isRefreshing ? (
+    <div className="app_loader">
+      <b>Refreshing user...</b>
+      <DNA
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="dna-loading"
+        wrapperStyle={{}}
+        wrapperClass="dna-wrapper"
       />
     </div>
+  ) : (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/register"
+          element={
+            <RestrictedRoute
+              redirectTo="/contacts"
+              component={<RegistrationPage />}
+            />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RestrictedRoute redirectTo="/contacts" component={<LoginPage />} />
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <PrivateRoute redirectTo="/login" component={<ContactsPage />} />
+          }
+        />
+      </Routes>
+      <Toaster />
+    </Layout>
   );
 }
 

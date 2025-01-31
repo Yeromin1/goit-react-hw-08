@@ -18,14 +18,14 @@
 .button {
   padding: 10px;
   border: none;
-  background-color: #4caf50;
+  background-color: rgb(16 211 7);
   color: white;
   font-size: 16px;
   border-radius: 4px;
 }
 
 .button:hover {
-  background-color: #65b467;
+  background-color: rgb(5, 127, 22);
 }
 
 .error {

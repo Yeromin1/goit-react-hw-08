@@ -1,0 +1,25 @@
+.navigation {
+  display: flex;
+  font-size: 26px;
+  font-weight: 600;
+  position: relative;
+}
+
+.navigation_link {
+  color: black;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+}
+
+.navigation_link_active {
+  color: rgb(206 21 21);
+}
+
+.navigation_link_active::before {
+  content: '';
+  position: absolute;
+  top: 48px;
+  width: 100px;
+  border: 1px solid rgb(206 21 21);
+}
